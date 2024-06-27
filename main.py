@@ -24,16 +24,17 @@ def fetch_volume_data(token_address):
     print("Fetching volume data...")
     query = """
     {
-      EVM(dataset: realtime, network: eth) {
-        DEXTradeByTokens(
-          where: {Trade: {Currency: {SmartContract: {is: "%s"}}}, Block: {Time: {since: "%s", till: "%s"}}}
-        ) {
-          buy: sum(of: Trade_AmountInUSD)
-          sell: sum(of: Trade_Side_AmountInUSD)
-          count
-        }
-      }
+  EVM(dataset: realtime, network: eth) {
+    DEXTradeByTokens(
+      where: {Trade: {Currency: {SmartContract: {is: "%s"}}, Side: {Currency: {SmartContract: {is: "0xdac17f958d2ee523a2206206994597c13d831ec7"}}}}, Block: {Time: {since: "%s", till: "%s"}}}
+    ) {
+      buy: sum(of: Trade_AmountInUSD)
+      sell: sum(of: Trade_Side_AmountInUSD)
+      count
     }
+  }
+}
+
     """ % (token_address, PREDEFINED_SINCE_DATE, PREDEFINED_TILL_DATE)
 
     print("Querying Bitquery API...")
